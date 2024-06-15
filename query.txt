@@ -1,0 +1,81 @@
+all_users = User.query.all()
+
+specific_user = User.query.get(id)
+
+john_users = User.query.filter_by(username='John').all()
+
+similar_names = User.query.filter(User.username.like('%John%')).all()
+
+from sqlalchemy import or_
+john_or_mary = User.query.filter(or_(User.username == 'John', User.username == 'Mary')).all()
+
+sorted_users = User.query.order_by(User.username).all()
+
+# adding data
+new_user = User(username='Alice', email='alice@example.com')
+db.session.add(new_user)
+db.session.commit()
+
+
+# inserting or update
+    user = User(username='David', email='david@example.com')
+    db.session.merge(user)
+    db.session.commit()
+    or..
+    User.query.filter_by(username='Alice').update({'email': 'newemail@example.com'})
+    db.session.commit()
+
+
+
+
+
+
+
+    book  = Book.query.filter_by(id = 1).first()
+    section = Section.query.filter(Section.id == 4).first()
+## getting data for a association table 
+    print(book.sections)
+    print(section.books)
+
+## removing row from association table 
+# book.sections.remove(section)
+# db.session.commit()
+
+## adding data to association table
+    # book_section_association_data = {
+    #     'book_id': book.id,
+    #     'section_id': section.id,
+    #     'book_section_column': 'example_data'
+    # }
+
+    # # Add the data to the association table
+    # db.session.execute(book_section_association.insert().values(**book_section_association_data))
+
+    # # Commit the session to persist the changes
+    # db.session.commit()
+
+## querying into association table
+    # query = db.session.query(book_section_association).filter_by(section_id= section.id, book_id=book.id)
+    # print(query)
+
+    # row =  query.first()
+    # print(row.book_section_column)
+
+## updating association table
+    db.session.query(book_section_association).filter_by(section_id= section.id, book_id=book.id).update({'book_section_column': 'google_data'})
+    db.session.commit()
+
+
+
+
+
+
+#### event handlers
+def on_model_change(mapper, connection, target):
+        # Your function logic here
+        print(f"Model {target.__class__.__name__} with id {target.id} has been changed.")
+
+    # Add event listener to YourModel for 'after_update', 'after_insert', and 'after_delete' events
+    # event.listen(Book, 'after_update', on_model_change)
+    # event.listen(Book, 'after_insert', on_model_change)
+    event.listen(Book, 'after_delete', on_model_change)
