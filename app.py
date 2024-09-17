@@ -10,7 +10,7 @@ from flask_cors import CORS
 from database.model import db
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://pathology.vercel.app/"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.abspath(os.path.join(os.getcwd(), 'database', 'path.sqlite3'))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # Disable modification tracking to suppress a warning
